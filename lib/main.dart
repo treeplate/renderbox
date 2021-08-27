@@ -3,7 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp(width: 20, height: 30, color: Colors.yellow));
+  runApp(
+      const Center(child: MyApp(width: 20, height: 30, color: Colors.yellow)));
 }
 
 class MyApp extends RenderObjectWidget {
