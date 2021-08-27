@@ -1,14 +1,76 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(
-      const Center(child: MyApp(width: 20, height: 30, color: Colors.yellow)));
+    const BoxPositioner(
+      Center(
+        child: MyBox(
+          width: 20,
+          height: 30,
+          color: Colors.yellow,
+        ),
+      ),
+      Offset(30, 30),
+    ),
+  );
 }
 
-class MyApp extends RenderObjectWidget {
-  const MyApp({
+// Box Positioner
+
+class BoxPositioner extends RenderObjectWidget {
+  final RenderObjectWidget child;
+  final Offset offset;
+  const BoxPositioner(this.child, this.offset, {Key? key}) : super(key: key);
+
+  @override
+  RenderObjectElement createElement() {
+    return MyBPElement(this);
+  }
+
+  @override
+  RenderObject createRenderObject(BuildContext context) {
+    return BoxPositionerRenderObject(
+      child.createRenderObject(context) as RenderBox?,
+      offset,
+    );
+  }
+}
+
+class BoxPositionerRenderObject extends RenderShiftedBox {
+  final Offset offset;
+
+  BoxPositionerRenderObject(RenderBox? child, this.offset) : super(child);
+  @override
+  bool sizedByParent = true;
+  @override
+  Size computeDryLayout(BoxConstraints constraints) {
+    return constraints.biggest;
+  }
+
+  @override
+  void performLayout() {
+    Size childSize = getDryLayout(constraints);
+    if (childSize.isEmpty) childSize = constraints.biggest;
+    child!.layout(BoxConstraints.loose(childSize));
+  }
+
+  @override
+  void paint(PaintingContext context, Offset offset) {
+    context.paintChild(child!, offset + this.offset);
+  }
+}
+
+class MyBPElement extends RenderObjectElement {
+  MyBPElement(RenderObjectWidget widget) : super(widget);
+}
+
+// Box
+
+class MyBox extends RenderObjectWidget {
+  const MyBox({
     this.width,
     this.height,
     Key? key,
@@ -19,7 +81,7 @@ class MyApp extends RenderObjectWidget {
   final Color color;
   @override
   RenderObjectElement createElement() {
-    return MyElement(this);
+    return MyBoxElement(this);
   }
 
   @override
@@ -69,6 +131,6 @@ class MyRenderBox extends RenderBox {
   bool get sizedByParent => false;
 }
 
-class MyElement extends RenderObjectElement {
-  MyElement(RenderObjectWidget widget) : super(widget);
+class MyBoxElement extends RenderObjectElement {
+  MyBoxElement(RenderObjectWidget widget) : super(widget);
 }
