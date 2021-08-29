@@ -16,7 +16,7 @@ void main() {
   );
 }
 
-/// Box Positioner
+/// Box Positioner:
 /// This widget is like a [Positioned], but takes the position as an [Offset] instead of a left-top-bottom-right-choose-two.
 
 class BoxPositioner extends RenderObjectWidget {
@@ -66,7 +66,7 @@ class MyBPElement extends RenderObjectElement {
   MyBPElement(RenderObjectWidget widget) : super(widget);
 }
 
-/// MyBox
+/// MyBox:
 /// This is a [RenderObjectWidget] version of what is basically a [SizedBox]/[ColoredBox] combo, or a primitive [Container].
 
 class MyBox extends RenderObjectWidget {
