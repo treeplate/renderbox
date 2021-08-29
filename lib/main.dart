@@ -6,19 +6,18 @@ import 'package:flutter/rendering.dart';
 void main() {
   runApp(
     const BoxPositioner(
-      Center(
-        child: MyBox(
-          width: 20,
-          height: 30,
-          color: Colors.yellow,
-        ),
+      MyBox(
+        width: 60,
+        height: 50,
+        color: Colors.yellow,
       ),
-      Offset(30, 30),
+      Offset(0, 0),
     ),
   );
 }
 
-// Box Positioner
+/// Box Positioner
+/// This widget is like a [Positioned], but takes the position as an [Offset] instead of a left-top-bottom-right-choose-two.
 
 class BoxPositioner extends RenderObjectWidget {
   final RenderObjectWidget child;
@@ -52,7 +51,7 @@ class BoxPositionerRenderObject extends RenderShiftedBox {
 
   @override
   void performLayout() {
-    Size childSize = getDryLayout(constraints);
+    Size childSize = getDryLayout(BoxConstraints.loose(constraints.biggest));
     if (childSize.isEmpty) childSize = constraints.biggest;
     child!.layout(BoxConstraints.loose(childSize));
   }
@@ -67,7 +66,8 @@ class MyBPElement extends RenderObjectElement {
   MyBPElement(RenderObjectWidget widget) : super(widget);
 }
 
-// Box
+/// MyBox
+/// This is a [RenderObjectWidget] version of what is basically a [SizedBox]/[ColoredBox] combo, or a primitive [Container].
 
 class MyBox extends RenderObjectWidget {
   const MyBox({
